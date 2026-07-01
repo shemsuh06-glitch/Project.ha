@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ሀላል ኤሌክትሮኒክስ - ጥገና አገልግሎት</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans Ethiopic', 'Segoe UI', Tahoma, sans-serif;
+            background: #f5efe7;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0a1628;
+            font-weight: 700;
+            padding: 14px 40px;
+            border-radius: 14px;
+            font-size: 1rem;
+            transition: 0.4s;
+            box-shadow: 0 8px 24px rgba(251,191,36,0.35);
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(251,191,36,0.5);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fbbf24;
+            box-shadow: none;
+        }
+        .btn-outline:hover { background: #fbbf24; color: #0a1628; }
+        .btn-sm { padding: 8px 20px; font-size: 0.85rem; }
+        .text-gold { color: #fbbf24; }
+
+        .topbar {
+            background: #0a1628;
+            color: #94a3b8;
+            padding: 6px 0;
+            font-size: 0.8rem;
+            border-bottom: 2px solid #fbbf24;
+        }
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .topbar a { color: #94a3b8; transition: 0.3s; }
+        .topbar a:hover { color: #fbbf24; }
+        .topbar .social-links a { margin-left: 10px; font-size: 0.85rem; }
+
+        header {
+            background: #0a1628;
+            color: #fff;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        header .logo img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+        }
+        header .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        header .logo h1 span { color: #fbbf24; }
+        header .logo .sub { font-size: 0.65rem; color: #fbbf24; display: block; margin-top: -4px; letter-spacing: 1px; }
+        nav ul {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        nav ul li a {
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            transition: 0.3s;
+            position: relative;
+        }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fbbf24;
+            transition: 0.3s;
+        }
+        nav ul li a:hover::after { width: 100%; }
+        nav ul li a:hover { color: #fbbf24; }
+        nav ul li a.btn { color: #fff; }
+        nav ul li a.btn:hover { color: #fff; }
+        .nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #2a1a0a 100%);
+            color: #fff;
+            padding: 80px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(251,191,36,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero .container { position: relative; z-index: 1; }
+        .hero .hero-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #0a1628;
+            padding: 4px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .hero h2 span { color: #fbbf24; }
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 680px;
+            margin: 0 auto 28px;
+            opacity: 0.9;
+            color: #d4c9b8;
+        }
+        .hero .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        .stats {
+            background: #faf6f0;
+            padding: 50px 24px;
+            border-bottom: 1px solid #e2dcd4;
+            position: relative;
+        }
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+        }
+        .stats .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #0a1628, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card p { font-size: 1rem; color: #475569; font-weight: 500; }
+
+        .testimonials {
+            padding: 70px 24px;
+            background: linear-gradient(135deg, #0a1628, #1a2a4a);
+            color: #fff;
+        }
+        .testimonials .section-header h2 { color: #fff; }
+        .testimonials .section-header h2 span { color: #fbbf24; }
+        .testimonials .section-header p { color: #94a3b8; }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 24px;
+            transition: 0.4s;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            border-color: #fbbf24;
+        }
+        .testimonial-card .stars { color: #fbbf24; margin-bottom: 8px; font-size: 1.1rem; }
+        .testimonial-card .text { color: #d4c9b8; font-size: 1rem; margin-bottom: 12px; font-style: italic; }
+        .testimonial-card .author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-card .author img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fbbf24;
+        }
+        .testimonial-card .author .name { font-weight: 700; color: #fff; }
+        .testimonial-card .author .role { font-size: 0.8rem; color: #94a3b8; }
+
+        .services {
+            padding: 70px 24px;
+            background: #f5efe7;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-header .subtitle {
+            color: #fbbf24;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0a1628;
+            margin-top: 6px;
+        }
+        .section-header h2 span { color: #fbbf24; }
+        .section-header p { color: #475569; max-width: 600px; margin: 10px auto 0; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        .service-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: 0.4s;
+            border: 1px solid #e2dcd4;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            transform: scaleX(0);
+            transition: 0.4s;
+        }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(251,191,36,0.15);
+            border-color: #fbbf24;
+        }
+        .service-card .icon {
+            font-size: 2.8rem;
+            color: #fbbf24;
+            margin-bottom: 12px;
+        }
+        .service-card h4 { font-size: 1.05rem; font-weight: 700; color: #0a1628; margin-bottom: 4px; }
+        .service-card p { font-size: 0.9rem; color: #64748b; }
+
+        .about {
+            padding: 70px 24px;
+            background: #ffffff;
+        }
+        .about .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            max-width: 1100px;
+        }
+        .about-image img {
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            border: 4px solid #fbbf24;
+        }
+        .about h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0a1628;
+            line-height: 1.2;
+        }
+        .about h2 span { color: #fbbf24; }
+        .about p { color: #475569; font-size: 1rem; margin-bottom: 14px; }
+
+        .request {
+            padding: 70px 24px;
+            background: linear-gradient(135deg, #faf6f0, #f5efe7);
+            position: relative;
+        }
+        .request::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+        }
+        .request .container { max-width: 720px; }
+        .request-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .request-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .request-form input,
+        .request-form select,
+        .request-form textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2dcd4;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #ffffff;
+            transition: 0.3s;
+            outline: none;
+        }
+        .request-form input:focus,
+        .request-form select:focus,
+        .request-form textarea:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 4px rgba(251,191,36,0.12);
+        }
+        .request-form textarea { min-height: 120px; resize: vertical; }
+        .request-form .btn { align-self: flex-start; padding: 14px 48px; }
+
+        .location-picker {
+            background: #f8fafc;
+            border: 2px dashed #e2dcd4;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 4px;
+        }
+        .location-picker .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .location-picker .row input { flex: 1; min-width: 100px; }
+        .location-picker .row button { flex: 0 0 auto; }
+        .location-picker small { color: #64748b; font-size: 0.8rem; display: block; margin-top: 6px; }
+
+        .contact {
+            padding: 70px 24px;
+            background: #0a1628;
+            color: #fff;
+        }
+        .contact .section-header h2 { color: #fff; }
+        .contact .section-header h2 span { color: #fbbf24; }
+        .contact .section-header p { color: #94a3b8; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 32px;
+        }
+        .contact-info h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 16px;
+        }
+        .contact-info p {
+            color: #94a3b8;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .contact-info p i { color: #fbbf24; width: 24px; text-align: center; }
+        .contact-info .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .contact-info .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            font-size: 1.3rem;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .contact-info .social-links a:hover {
+            background: #fbbf24;
+            border-color: #fbbf24;
+            color: #0a1628;
+            transform: translateY(-4px);
+        }
+        .contact-map {
+            background: linear-gradient(135deg, #1a2a4a, #2a1a0a);
+            border-radius: 20px;
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-direction: column;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .contact-map i { font-size: 2.8rem; color: #fbbf24; margin-bottom: 12px; }
+
+        footer {
+            background: #0a1628;
+            color: #94a3b8;
+            padding: 40px 24px 24px;
+            border-top: 3px solid #fbbf24;
+        }
+        footer .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+        }
+        footer h4 { color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+        footer a { color: #94a3b8; display: block; margin-bottom: 6px; transition: 0.3s; }
+        footer a:hover { color: #fbbf24; transform: translateX(4px); }
+        footer .footer-bottom {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+        footer .footer-bottom span { color: #fbbf24; }
+
+        @media (max-width: 992px) {
+            .about .container { grid-template-columns: 1fr; text-align: center; }
+            .contact-grid { grid-template-columns: 1fr; }
+            footer .container { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-toggle { display: block; }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+                padding: 12px 0 6px;
+                border-top: 1px solid rgba(255,255,255,0.06);
+                margin-top: 10px;
+                background: #0a1628;
+            }
+            nav ul.open { display: flex; }
+            .hero h2 { font-size: 2.2rem; }
+            .hero { padding: 60px 24px; }
+            .stat-card h3 { font-size: 2.2rem; }
+            .section-header h2 { font-size: 2rem; }
+            .request-form .form-row { grid-template-columns: 1fr; }
+            footer .container { grid-template-columns: 1fr; }
+            .topbar .container { flex-direction: column; text-align: center; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .location-picker .row { flex-direction: column; }
+            .location-picker .row button { width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .hero h2 { font-size: 1.8rem; }
+            .stats .container { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .services-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            header .logo h1 { font-size: 1rem; }
+            header .logo img { height: 35px; }
+        }
+
+        .fade-up { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .form-success {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 14px;
+            border: 2px solid #86efac;
+        }
+        .form-success.show { display: block; }
+        .form-error {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 14px;
+            border: 2px solid #fca5a5;
+        }
+        .form-error.show { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <div class="container">
+            <div>
+                <i class="fas fa-phone" style="color:#fbbf24;"></i>
+                <a href="tel:+251911234567">+251 911 234 567</a>
+                <span style="color:#2a3a5a; margin:0 6px;">|</span>
+                <a href="https://t.me/Halalelectronics34" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            </div>
+            <div class="social-links">
+                <a href="https://tiktok.com/@halalelectronics" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="https://facebook.com/HalAlElectronics" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/halal_elec" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/50x50/fbbf24/0a1628?text=H" alt="ሀላል ኤሌክትሮኒክስ" />
+                <div>
+                    <h1>ሀላል <span>ኤሌክትሮኒክስ</span></h1>
+                    <span class="sub"><i class="fas fa-tools"></i> እና ጥገና</span>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <nav>
+                    <ul id="navMenu">
+                        <li><a href="#home">መነሻ</a></li>
+                        <li><a href="#services">አገልግሎቶች</a></li>
+                        <li><a href="#testimonials">ምስክሮች</a></li>
+                        <li><a href="#about">ስለእኛ</a></li>
+                        <li><a href="#contact">አግኙን</a></li>
+                        <li><a href="admin.html" class="btn btn-sm btn-dark" style="background:linear-gradient(135deg, #0a1628, #1a2a4a); color:#fff;">⚙️ አስተዳደር</a></li>
+                        <li><a href="tech.html" class="btn btn-sm" style="background:#22c55e; color:#fff; box-shadow: none;">📡 ቴክኒሻን</a></li>
+                        <li><a href="#request" class="btn btn-sm" style="background:#fbbf24; color:#0a1628; box-shadow: none;">ጥገና ይጠይቁ</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-badge">⭐ በአዲስ አበባ በሺዎች የሚታመን</div>
+            <h2>ሙያዊ የኤሌክትሮኒክስ <span>ጥገና</span> አገልግሎት</h2>
+            <p>ለልብስ ማጠቢያ ማሽን፣ ማቀዝቀዣ፣ ቴሌቪዥን፣ ምድጃ እና ቦይለር ባለሙያ ጥገና እና እርማት — ከ400,000+ ተከታዮች ጋር</p>
+            <div class="btn-group">
+                <a href="#request" class="btn">ጥገና ይጠይቁ</a>
+                <a href="#services" class="btn btn-outline">አገልግሎቶች</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stat-card fade-up"><h3>400K+</h3><p>TikTok ተከታዮች</p></div>
+            <div class="stat-card fade-up"><h3>30+</h3><p>ሙያዊ ቴክኒሻኖች</p></div>
+            <div class="stat-card fade-up"><h3>24/7</h3><p>የደንበኛ ድጋፍ</p></div>
+            <div class="stat-card fade-up"><h3>99%</h3><p>የደንበኛ እርካታ</p></div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-up">
+                <p class="subtitle">💬 የደንበኞች ምስክርነት</p>
+                <h2>ደንበኞቻችን <span>ምን ይላሉ?</span></h2>
+                <p>ከ1000+ ደስተኛ ደንበኞቻችን የተወሰኑት</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card fade-up">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="text">"ልብስ ማጠቢያ ማሽኔ ተበላሽቶ ነበር። በጣም ፈጣን እና ባለሙያ ስራ ሰሩልኝ።"</p>
+                    <div class="author">
+                        <img src="https://via.placeholder.com/48/fbbf24/fff?text=S" />
+                        <div><div class="name">ሳራ አለሙ</div><div class="role">ደንበኛ ከ2023</div></div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="text">"ቴሌቪዥኔ ተበላሽቶ ነበር። በቀኑ መጥተው አስተካክለውልኝ። እጅግ አመሰግናለሁ!"</p>
+                    <div class="author">
+                        <img src="https://via.placeholder.com/48/fbbf24/fff?text=A" />
+                        <div><div class="name">አብዱ መሀመድ</div><div class="role">ደንበኛ ከ2024</div></div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-up">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="text">"ማቀዝቀዣችን ጥገና ያስፈልገው ነበር። ባለሙያዎቹ ፈጣን እና አስተማማኝ ነበሩ።"</p>
+                    <div class="author">
+                        <img src="https://via.placeholder.com/48/fbbf24/fff?text=M" />
+                        <div><div class="name">ሙሉ አለሙ</div><div class="role">ደንበኛ ከ2022</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header fade-up">
+                <p class="subtitle">⭐ አገልግሎቶቻችን</p>
+                <h2>ምን <span>እናደርጋለን?</span></h2>
+                <p>ለሁሉም የቤት ኤሌክትሮኒክስ መሳሪያዎች ከፍተኛ ጥራት ያለው ጥገና እና እርማት እንሰጣለን።</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-up">
+                    <div class="icon"><i class="fas fa-washing-machine"></i></div>
+                    <h4>የልብስ ማጠቢያ ማሽን</h4>
+                    <p>ለሁሉም የምርት ዓይነቶች</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="icon"><i class="fas fa-snowflake"></i></div>
+                    <h4>ማቀዝቀዣ</h4>
+                    <p>የማቀዝቀዣ ሥርዓት እና ኮምፕረሰር</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="icon"><i class="fas fa-tv"></i></div>
+                    <h4>ቴሌቪዥን</h4>
+                    <p>ስክሪን፣ ድምጽ እና ሰርኪዩት</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="icon"><i class="fas fa-oven"></i></div>
+                    <h4>ምድጃ</h4>
+                    <p>ማሞቂያ ኤለመንት እና ቴርሞስታት</p>
+                </div>
+                <div class="service-card fade-up">
+                    <div class="icon"><i class="fas fa-fire"></i></div>
+                    <h4>ቦይለር</h4>
+                    <p>የግፊት እና የማሞቂያ ሥርዓት</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-image fade-up">
+                <img src="https://via.placeholder.com/600x400/f5efe7/0a1628?text=ሀላል+ኤሌክትሮኒክስ" alt="ስለ ሀላል ኤሌክትሮኒክስ" />
+            </div>
+            <div class="fade-up">
+                <div style="color:#fbbf24; font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.8rem; margin-bottom:6px;">📖 ስለእኛ</div>
+                <h2>ሀላል <span>ኤሌክትሮኒክስ እና ጥገና</span></h2>
+                <p>ሀላል ኤሌክትሮኒክስ እና ጥገና በአዲስ አበባ ውስጥ መሪ የኤሌክትሮኒክስ ጥገና እና እርማት ኩባንያ ነው።</p>
+                <p>ከ30 በላይ ሙያዊ ቴክኒሻኖች እና ከ400,000+ በላይ ተከታዮች ጋር፣ ፈጣን፣ አስተማማኝ እና ተመጣጣኝ አገልግሎት ለመስጠት ቆርጠን ተነስተናል።</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+                    <span style="background:#fbbf24; color:#0a1628; padding:4px 14px; border-radius:50px; font-weight:600; font-size:0.8rem;">✓ ከ2020 ጀምሮ</span>
+                    <span style="background:#fbbf24; color:#0a1628; padding:4px 14px; border-radius:50px; font-weight:600; font-size:0.8rem;">✓ 30+ ባለሙያዎች</span>
+                    <span style="background:#fbbf24; color:#0a1628; padding:4px 14px; border-radius:50px; font-weight:600; font-size:0.8rem;">✓ 100% እርካታ</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="request" id="request">
+        <div class="container">
+            <div class="section-header fade-up">
+                <p class="subtitle">📝 ቅጽ ይሙሉ</p>
+                <h2>ጥገና <span class="text-gold">ይጠይቁ</span></h2>
+                <p>ከታች ያለውን ቅጽ ይሙሉ እና ቡድናችን በ30 ደቂቃ ውስጥ ያነጋግርዎታል።</p>
+            </div>
+            <form class="request-form" id="serviceForm">
+                <div class="form-row">
+                    <input type="text" placeholder="ሙሉ ስም" required id="fullName" />
+                    <input type="tel" placeholder="ስልክ ቁጥር" required id="phone" />
+                </div>
+                <input type="text" placeholder="አድራሻ (ክፍለ ከተማ እና ሰፈር)" id="address" />
+                <select id="appliance" required>
+                    <option value="">መሳሪያ ይምረጡ</option>
+                    <option value="Washing Machine">የልብስ ማጠቢያ ማሽን</option>
+                    <option value="Refrigerator">ማቀዝቀዣ</option>
+                    <option value="Television">ቴሌቪዥን</option>
+                    <option value="Oven">ምድጃ</option>
+                    <option value="Boiler">ቦይለር</option>
+                </select>
+                <textarea placeholder="ችግሩን በዝርዝር ይግለጹ..." id="problem"></textarea>
+
+                <div class="location-picker">
+                    <label style="font-weight:600; display:block; margin-bottom:6px;">📍 ቦታዎን ያጋሩ (አማራጭ)</label>
+                    <div class="row">
+                        <input type="text" id="customerLat" placeholder="ላቲቱድ (ለም: 9.0322)" />
+                        <input type="text" id="customerLng" placeholder="ሎንጊቱድ (ለም: 38.7422)" />
+                        <button type="button" id="getLocationBtn" class="btn btn-sm" style="background:#34a853; box-shadow:none; padding:10px 18px; color:#fff;">📍 ቦታ አግኝ</button>
+                    </div>
+                    <small><i class="fas fa-info-circle"></i> ከGoogle Maps ላይ ቦታዎን ለማግኘት ቁልፉን ይጫኑ</small>
+                    <div id="locationStatus" style="margin-top:6px; font-size:0.85rem; color:#64748b;"></div>
+                </div>
+
+                <button type="submit" class="btn">ጥያቄ ያስገቡ</button>
+                <div class="form-success" id="formSuccess"><i class="fas fa-check-circle"></i> ጥያቄዎ ተልኳል! በቅርቡ እናግኝዎታለን።</div>
+                <div class="form-error" id="formError"><i class="fas fa-exclamation-circle"></i> ስህተት ተከስቷል።</div>
+            </form>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header fade-up">
+                <p class="subtitle">📞 ያነጋግሩን</p>
+                <h2>አግኙን <span>እዚህ</span></h2>
+                <p>በማንኛውም ጊዜ ያነጋግሩን — ለመርዳት እዚህ ነን።</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info fade-up">
+                    <h3>የመገናኛ መረጃ</h3>
+                    <p><i class="fas fa-phone"></i> +251 911 234 567</p>
+                    <p><i class="fab fa-whatsapp"></i> +251 911 234 567</p>
+                    <p><i class="fas fa-envelope"></i> info@halalelectronics.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> አዲስ አበባ፣ ኢትዮጵያ</p>
+                    <div class="social-links">
+                        <a href="https://tiktok.com/@halalelectronics" target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://instagram.com/halal_elec" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com/HalAlElectronics" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://t.me/Halalelectronics34" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                    </div>
+                    <a href="https://t.me/Halalelectronics34" target="_blank" class="btn" style="background:#0088cc; color:#fff; padding:10px 24px; border-radius:14px; display:inline-block; margin-top:12px; box-shadow:none;">
+                        <i class="fab fa-telegram-plane"></i> በቴሌግራም ያነጋግሩን
+                    </a>
+                </div>
+                <div class="contact-map fade-up">
+                    <i class="fas fa-map-pin"></i>
+                    <p style="margin-top:8px; font-weight:600;">በሁሉም የአዲስ አበባ ክፍለ ከተሞች</p>
+                    <p style="font-size:0.85rem; color:#94a3b8;">ቦሌ፣ ኪርኮስ፣ ልደታ፣ የካ፣ ንፋስ ስልክ</p>
+                    <a href="https://maps.app.goo.gl/nNpyyUmu2BGpCQgt9" target="_blank" class="btn" style="background:#34a853; color:#fff; padding:10px 24px; border-radius:14px; display:inline-block; margin-top:12px; box-shadow:none;">
+                        <i class="fas fa-directions"></i> ዳይሬክሽን ያግኙ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div>
+                <h4>ሀላል <span style="color:#fbbf24;">ኤሌክትሮኒክስ እና ጥገና</span></h4>
+                <p>በአዲስ አበባ መሪ የኤሌክትሮኒክስ ጥገና ኩባንያ።</p>
+                <p><i class="fas fa-phone" style="color:#fbbf24;"></i> +251 911 234 567</p>
+                <p><i class="fas fa-envelope" style="color:#fbbf24;"></i> info@halalelectronics.com</p>
+            </div>
+            <div>
+                <h4>ፈጣን አገናኞች</h4>
+                <a href="#home">መነሻ</a>
+                <a href="#services">አገልግሎቶች</a>
+                <a href="#testimonials">ምስክሮች</a>
+                <a href="#about">ስለእኛ</a>
+                <a href="#contact">አግኙን</a>
+            </div>
+            <div>
+                <h4>ማህበራዊ ገፆች</h4>
+                <a href="https://tiktok.com/@halalelectronics" target="_blank"><i class="fab fa-tiktok"></i> TikTok 400K</a>
+                <a href="https://facebook.com/HalAlElectronics" target="_blank"><i class="fab fa-facebook-f"></i> Facebook 100K</a>
+                <a href="https://instagram.com/halal_elec" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://t.me/Halalelectronics34" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 <span>ሀላል ኤሌክትሮኒክስ እና ጥገና</span>። ሁሉም መብቶች የተጠበቁ ናቸው።</p>
+                <div style="margin-top:4px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                    <a href="admin.html" style="color:#64748b; font-size:0.75rem;"><i class="fas fa-lock"></i> አስተዳደር</a>
+                    <a href="tech.html" style="color:#64748b; font-size:0.75rem;"><i class="fas fa-satellite-dish"></i> ቴክኒሻን</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2zbhHdvzMbcKCThEpAeFhUyKM6ujj0Do",
+            authDomain: "halal-electronics-4aab5.firebaseapp.com",
+            projectId: "halal-electronics-4aab5",
+            storageBucket: "halal-electronics-4aab5.firebasestorage.app",
+            messagingSenderId: "595316878363",
+            appId: "1:595316878363:web:162cc203a7d21d7fb11cbe"
+        };
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const BOT_TOKEN = "8812023700:AAFbAdj9UZWr4Upp7NL4j3E3FHSUEjCNOQY";
+        const CHAT_ID = "6006417128";
+
+        async function sendTelegramNotification(orderData) {
+            const message = `
+        📦 *አዲስ ትዕዛዝ!* 🎉
+
+        👤 *ስም:* ${orderData.fullName || '—'}
+        📱 *ስልክ:* ${orderData.phone || '—'}
+        🔧 *መሳሪያ:* ${orderData.appliance || '—'}
+        📍 *አድራሻ:* ${orderData.address || '—'}
+        📝 *ችግር:* ${orderData.problem || '—'}
+        🗺️ *ቦታ:* ${orderData.customerLat ? `${orderData.customerLat}, ${orderData.customerLng}` : 'አልተጋራም'}
+
+        ⏰ እባክዎ ደንበኛውን በቶሎ ያነጋግሩ!
+            `;
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+                });
+                console.log('✅ Telegram sent');
+            } catch (e) { console.warn('Telegram failed:', e); }
+        }
+
+        // Location
+        const customerLat = document.getElementById('customerLat');
+        const customerLng = document.getElementById('customerLng');
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        const locationStatus = document.getElementById('locationStatus');
+
+        getLocationBtn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                locationStatus.textContent = '⚠️ ጂፒኤስ አይደግፍም';
+                locationStatus.style.color = '#dc2626';
+                return;
+            }
+            locationStatus.textContent = '⏳ ቦታ በመፈለግ...';
+            locationStatus.style.color = '#fbbf24';
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude.toFixed(6);
+                    const lng = position.coords.longitude.toFixed(6);
+                    customerLat.value = lat;
+                    customerLng.value = lng;
+                    locationStatus.textContent = `✅ ቦታ: ${lat}, ${lng}`;
+                    locationStatus.style.color = '#22c55e';
+                },
+                () => {
+                    locationStatus.textContent = '❌ ቦታ ማግኘት አልተቻለም';
+                    locationStatus.style.color = '#dc2626';
+                }
+            );
+        });
+
+        // Form submit
+        const form = document.getElementById('serviceForm');
+        const successMsg = document.getElementById('formSuccess');
+        const errorMsg = document.getElementById('formError');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const appliance = document.getElementById('appliance').value;
+            const problem = document.getElementById('problem').value.trim();
+            const lat = customerLat.value.trim();
+            const lng = customerLng.value.trim();
+
+            if (!fullName || !phone || !appliance) {
+                alert('እባክዎ ሁሉንም አስፈላጊ መስኮች ይሙሉ።');
+                return;
+            }
+
+            const orderData = {
+                fullName,
+                phone,
+                address: address || '—',
+                appliance,
+                problem: problem || '—',
+                status: "Pending",
+                createdAt: new Date()
+            };
+
+            if (lat && lng) {
+                orderData.customerLat = parseFloat(lat);
+                orderData.customerLng = parseFloat(lng);
+            }
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                await sendTelegramNotification(orderData);
+                successMsg.classList.add('show');
+                errorMsg.classList.remove('show');
+                form.reset();
+                setTimeout(() => successMsg.classList.remove('show'), 4000);
+            } catch (error) {
+                console.error(error);
+                errorMsg.classList.add('show');
+                setTimeout(() => errorMsg.classList.remove('show'), 4000);
+            }
+        });
+
+        // Nav toggle
+        const toggleBtn = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        toggleBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('open');
+            const icon = this.querySelector('i');
+            icon.className = navMenu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('open');
+                const icon = toggleBtn.querySelector('i');
+                icon.className = 'fas fa-bars';
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        fadeElements.forEach(el => observer.observe(el));
+
+        console.log('🚀 ሀላል ኤሌክትሮኒክስ ዝግጁ ነው!');
+    </script>
+</body>
+</html>
