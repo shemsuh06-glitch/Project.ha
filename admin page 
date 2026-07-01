@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>አስተዳደር - ሀላል ኤሌክትሮኒክስ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans Ethiopic', 'Segoe UI', Tahoma, sans-serif;
+            background: #f5efe7;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; border-radius: 10px; padding: 8px 16px; font-family: inherit; }
+        input, select, textarea { font-family: inherit; padding: 10px 14px; border: 2px solid #e2dcd4; border-radius: 10px; outline: none; font-size: 0.95rem; width: 100%; background: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: #fbbf24; box-shadow: 0 0 0 3px rgba(251,191,36,0.15); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0a1628;
+            font-weight: 700;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(251,191,36,0.35); }
+        .btn-success { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+        .btn-success:hover { box-shadow: 0 8px 24px rgba(34,197,94,0.35); }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #38bdf8); color: #fff; }
+        .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
+
+        #loginContainer {
+            max-width: 400px;
+            margin: 80px auto;
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #loginContainer h1 { font-size: 2rem; color: #0a1628; }
+        #loginContainer h1 span { color: #fbbf24; }
+        #loginContainer p { color: #64748b; margin-bottom: 24px; }
+        #loginContainer .form-group { margin-bottom: 16px; text-align: left; }
+        #loginContainer label { font-weight: 600; display: block; margin-bottom: 4px; }
+        #loginContainer input { padding: 12px; }
+        #loginContainer .btn-login {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0a1628;
+            font-weight: 700;
+            padding: 14px;
+            width: 100%;
+            font-size: 1.1rem;
+            border-radius: 10px;
+        }
+        #loginError { color: #dc2626; font-size: 0.9rem; margin-top: 12px; display: none; }
+
+        #dashboard { display: none; }
+
+        .admin-header {
+            background: #0a1628;
+            color: #fff;
+            padding: 12px 0;
+            border-bottom: 3px solid #fbbf24;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .admin-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-header .logo img { height: 40px; width: auto; border-radius: 6px; }
+        .admin-header .logo h1 { font-size: 1.2rem; color: #fff; }
+        .admin-header .logo h1 span { color: #fbbf24; }
+        .admin-header .badge { background: #22c55e; color: #fff; padding: 2px 12px; border-radius: 50px; font-size: 0.65rem; font-weight: 700; }
+        .logout-btn { background: #ef4444; color: #fff; padding: 6px 18px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; }
+        .logout-btn:hover { background: #dc2626; }
+
+        .quick-nav {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 10px;
+        }
+        .quick-nav a {
+            color: #94a3b8;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .quick-nav a:hover { background: #fbbf24; color: #0a1628; }
+        .quick-nav a.active { background: #fbbf24; color: #0a1628; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            border: 1px solid #e2dcd4;
+        }
+        .stat-card .number { font-size: 2rem; font-weight: 900; color: #0a1628; }
+        .stat-card .label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            border: 1px solid #e2dcd4;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .card-header h3 { font-size: 1.1rem; font-weight: 700; color: #0a1628; display: flex; align-items: center; gap: 8px; }
+        .card-header h3 i { color: #fbbf24; }
+
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #f8fafc; color: #475569; padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid #e2dcd4; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f1f1f1; vertical-align: middle; }
+        tr:hover td { background: #faf6f0; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .status-pending { background: #fef9c3; color: #854d0e; }
+        .status-assigned { background: #bfdbfe; color: #1e40af; }
+        .status-completed { background: #dcfce7; color: #166534; }
+        .status-working { background: #dcfce7; color: #166534; }
+        .status-free { background: #fef9c3; color: #854d0e; }
+        .status-off { background: #e2e8f0; color: #475569; }
+        .status-absent { background: #fee2e2; color: #991b1b; }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #e2dcd4;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .tab-btn:hover { color: #0a1628; }
+        .tab-btn.active { background: #fbbf24; color: #0a1628; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .admin-header .logo h1 { font-size: 1rem; }
+            .quick-nav { justify-content: center; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 6px 8px; }
+            .tabs .tab-btn { font-size: 0.7rem; padding: 6px 10px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat-card .number { font-size: 1.5rem; }
+        }
+
+        .text-center { text-align: center; }
+        .text-muted { color: #94a3b8; font-size: 0.85rem; }
+        .mt-8 { margin-top: 8px; }
+        .flex { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOGIN ===== -->
+    <div id="loginContainer">
+        <h1>ሀላል <span>ኤሌክትሮኒክስ</span></h1>
+        <p>የአስተዳደር መግቢያ</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>የይለፍ ቃል</label>
+                <input type="password" id="password" placeholder="የይለፍ ቃል ያስገቡ" required />
+            </div>
+            <button type="submit" class="btn-login">ግባ</button>
+            <div id="loginError">የተሳሳተ የይለፍ ቃል</div>
+        </form>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard">
+
+        <header class="admin-header">
+            <div class="container">
+                <div class="logo">
+                    <img src="https://via.placeholder.com/40x40/fbbf24/0a1628?text=H" alt="ሀላል" />
+                    <div><h1>ሀላል <span>ኤሌክትሮኒክስ</span></h1></div>
+                    <span class="badge"><i class="fas fa-circle" style="font-size:0.4rem;"></i> LIVE</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="color:#94a3b8; font-size:0.8rem;">👨‍💼 አስተዳዳሪ</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> ውጣ</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container" style="margin-top:16px;">
+            <div class="quick-nav">
+                <a href="index.html">🏠 መነሻ</a>
+                <a href="tech.html">📡 ቴክኒሻን</a>
+                <a href="tech-map.html">🗺️ ካርታ</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card"><div class="number" id="totalOrders">0</div><div class="label">ጠቅላላ ትዕዛዝ</div></div>
+                <div class="stat-card"><div class="number" id="pendingOrders">0</div><div class="label">በመጠባበቅ ላይ</div></div>
+                <div class="stat-card"><div class="number" id="assignedOrders">0</div><div class="label">ተመድቧል</div></div>
+                <div class="stat-card"><div class="number" id="completedOrders">0</div><div class="label">ተጠናቋል</div></div>
+                <div class="stat-card"><div class="number" id="todayOrders">0</div><div class="label">የዛሬ ትዕዛዝ</div></div>
+                <div class="stat-card"><div class="number" id="todayIncome">0 ብር</div><div class="label">የዛሬ ገቢ</div></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="dashboard">📊 ዳሽቦርድ</button>
+                <button class="tab-btn" data-tab="orders">📋 ትዕዛዞች</button>
+                <button class="tab-btn" data-tab="technicians">👥 ቴክኒሻኖች</button>
+                <button class="tab-btn" data-tab="finance">💰 ፋይናንስ</button>
+                <button class="tab-btn" data-tab="settings">⚙️ ቅንብሮች</button>
+            </div>
+
+            <!-- ===== TAB 1: DASHBOARD ===== -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-bolt"></i> ፈጣን ድርጊቶች</h3></div>
+                    <div class="flex">
+                        <button class="btn btn-primary" onclick="document.querySelector('[data-tab=orders]').click()"><i class="fas fa-clipboard-list"></i> ትዕዛዞች</button>
+                        <button class="btn btn-success" onclick="document.querySelector('[data-tab=technicians]').click()"><i class="fas fa-user-plus"></i> አዲስ ቴክኒሻን</button>
+                        <button class="btn" onclick="document.querySelector('[data-tab=finance]').click()"><i class="fas fa-coins"></i> ፋይናንስ</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-list"></i> የቅርብ ጊዜ ትዕዛዞች</h3></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ደንበኛ</th><th>መሳሪያ</th><th>ሁኔታ</th><th>ተመድቧል</th><th>ቀን</th></tr></thead>
+                            <tbody id="recentOrdersBody"><tr><td colspan="5" class="text-center text-muted">ምንም ትዕዛዝ የለም</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 2: ORDERS ===== -->
+            <div id="tab-orders" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clipboard-list"></i> ከደንበኛ የገቡ የጥገና ጥያቄዎች</h3>
+                        <div class="flex">
+                            <select id="orderFilter" style="width:auto; padding:6px 12px;">
+                                <option value="all">ሁሉም</option>
+                                <option value="Pending">በመጠባበቅ</option>
+                                <option value="Assigned">ተመድቧል</option>
+                                <option value="Completed">ተጠናቋል</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" id="refreshOrders"><i class="fas fa-sync"></i> አድስ</button>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ደንበኛ</th><th>ስልክ</th><th>መሳሪያ</th><th>ሁኔታ</th><th>ተመድቧል</th><th>ቦታ</th><th>እርምጃ</th></tr></thead>
+                            <tbody id="ordersBody"><tr><td colspan="7" class="text-center text-muted">ምንም ጥያቄ የለም</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 3: TECHNICIANS ===== -->
+            <div id="tab-technicians" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-user-plus"></i> አዲስ ቴክኒሻን መመዝገቢያ</h3></div>
+                    <div class="flex">
+                        <input type="text" id="newTechName" placeholder="ሙሉ ስም" style="flex:2;" />
+                        <input type="text" id="newTechSpecialty" placeholder="ዘርፍ" style="flex:2;" />
+                        <input type="text" id="newTechPhone" placeholder="ስልክ" style="flex:1;" />
+                        <button class="btn btn-success" id="registerTechBtn"><i class="fas fa-save"></i> መዝግብ</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-users"></i> የተመዘገቡ ቴክኒሻኖች</h3></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ስም</th><th>ዘርፍ</th><th>ስልክ</th><th>ሁኔታ</th><th>እርምጃ</th></tr></thead>
+                            <tbody id="techListBody"><tr><td colspan="5" class="text-center text-muted">ምንም ቴክኒሻን የለም</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 4: FINANCE ===== -->
+            <div id="tab-finance" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-coins"></i> የገቢ እና ወጪ አስተዳደር</h3></div>
+                    <div class="stats-grid" style="margin-bottom:16px;">
+                        <div class="stat-card"><div class="number" id="totalIncome" style="color:#22c55e;">0 ብር</div><div class="label">ጠቅላላ ገቢ</div></div>
+                        <div class="stat-card"><div class="number" id="totalExpense" style="color:#dc2626;">0 ብር</div><div class="label">ጠቅላላ ወጪ</div></div>
+                        <div class="stat-card"><div class="number" id="netProfit" style="color:#0a1628;">0 ብር</div><div class="label">የተጣራ ትርፍ</div></div>
+                    </div>
+                    <div style="background:#f8fafc; padding:16px; border-radius:12px; margin-bottom:16px;">
+                        <h4 style="margin-bottom:8px;">+ አዲስ ገቢ/ወጪ ያክሉ</h4>
+                        <div class="flex">
+                            <input type="text" id="txDesc" placeholder="መግለጫ" style="flex:2;" />
+                            <input type="number" id="txAmount" placeholder="ገንዘብ" step="0.01" style="flex:1;" />
+                            <select id="txType" style="width:auto; flex:1;"><option value="income">ገቢ</option><option value="expense">ወጪ</option></select>
+                            <input type="date" id="txDate" style="width:auto; flex:1;" />
+                            <button class="btn" id="addTxBtn">ያስገቡ</button>
+                        </div>
+                    </div>
+                    <div><h4 style="margin-bottom:8px;">📋 የገቢ/ወጪ ታሪክ</h4><div id="txList"><p class="text-center text-muted">ምንም ግቤት የለም</p></div></div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 5: SETTINGS ===== -->
+            <div id="tab-settings" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-lock"></i> የይለፍ ቃላት</h3></div>
+                    <div class="flex">
+                        <input type="text" id="adminPassInput" placeholder="አዲስ የአስተዳደር ይለፍ ቃል" style="flex:2;" />
+                        <button class="btn btn-primary" id="savePasswordsBtn"><i class="fas fa-save"></i> አስቀምጥ</button>
+                    </div>
+                    <p class="text-muted mt-8">የአሁን ይለፍ ቃል: <strong id="currentPassDisplay">HalAl2026</strong></p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-file-alt"></i> የቴክኒሻን ህግና ደንብ</h3></div>
+                    <textarea id="rulesEditor" rows="6" style="width:100%; margin-bottom:12px; padding:14px; border-radius:12px; border:2px solid #e2dcd4; font-family:inherit; background:#faf6f0;">የቴክኒሻን ህግና ደንብ
+
+1. ተከታዮችን በአክብሮት መያዝ አለብን
+2. የደንበኛ መረጃ በሚስጥር መጠበቅ አለብን
+3. የስራ ሰዓትን ማክበር አለብን</textarea>
+                    <div class="flex">
+                        <button class="btn btn-primary" id="saveRulesBtn"><i class="fas fa-save"></i> ህጎቹን አስቀምጥ</button>
+                        <button class="btn btn-outline" id="previewRulesBtn"><i class="fas fa-eye"></i> ቅድመ-እይታ</button>
+                    </div>
+                    <div id="rulesPreview" style="display:none; margin-top:12px; background:#f8fafc; border:2px solid #fbbf24; border-radius:12px; padding:16px; white-space:pre-wrap;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-trash"></i> የሲስተም ቁጥጥር</h3></div>
+                    <div class="flex">
+                        <button class="btn btn-danger" id="clearAllTechs"><i class="fas fa-trash"></i> ሁሉንም ቴክኒሻኖች አጥፋ</button>
+                        <button class="btn btn-danger" id="clearAllOrders"><i class="fas fa-trash"></i> ሁሉንም ትዕዛዞች አጥፋ</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2zbhHdvzMbcKCThEpAeFhUyKM6ujj0Do",
+            authDomain: "halal-electronics-4aab5.firebaseapp.com",
+            projectId: "halal-electronics-4aab5",
+            storageBucket: "halal-electronics-4aab5.firebasestorage.app",
+            messagingSenderId: "595316878363",
+            appId: "1:595316878363:web:162cc203a7d21d7fb11cbe"
+        };
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc, addDoc, 
+            query, orderBy, limit, getDocs, where, serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        console.log('🚀 Admin connected');
+
+        let ADMIN_PASS = "HalAl2026";
+        let allOrders = [];
+        let allTransactions = [];
+        let allStaff = [];
+
+        // ===== AUTH =====
+        function checkAuth() {
+            const loggedIn = sessionStorage.getItem('adminLoggedIn');
+            if (loggedIn === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                initDashboard();
+            } else {
+                document.getElementById('loginContainer').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pass = document.getElementById('password').value;
+            if (pass === ADMIN_PASS) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                document.getElementById('loginError').style.display = 'none';
+                checkAuth();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('adminLoggedIn');
+            checkAuth();
+        });
+
+        // ===== TABS =====
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ===== INIT =====
+        function initDashboard() {
+            loadAdminPassword();
+
+            // Orders
+            onSnapshot(collection(db, "orders"), (snapshot) => {
+                allOrders = [];
+                snapshot.forEach(doc => allOrders.push({ id: doc.id, ...doc.data() }));
+                updateStats();
+                renderRecentOrders();
+                renderOrders();
+            });
+
+            // Transactions
+            onSnapshot(collection(db, "transactions"), (snapshot) => {
+                allTransactions = [];
+                snapshot.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
+                updateFinance();
+                renderTransactions();
+            });
+
+            // Staff
+            onSnapshot(collection(db, "staff"), (snapshot) => {
+                allStaff = [];
+                snapshot.forEach(doc => allStaff.push({ id: doc.id, ...doc.data() }));
+                renderTechList();
+            });
+
+            // Event listeners
+            document.getElementById('orderFilter').addEventListener('change', renderOrders);
+            document.getElementById('refreshOrders').addEventListener('click', renderOrders);
+            document.getElementById('addTxBtn').addEventListener('click', addTransaction);
+            document.getElementById('registerTechBtn').addEventListener('click', registerTechnician);
+            document.getElementById('savePasswordsBtn').addEventListener('click', savePassword);
+            document.getElementById('saveRulesBtn').addEventListener('click', saveRules);
+            document.getElementById('previewRulesBtn').addEventListener('click', previewRules);
+            document.getElementById('clearAllTechs').addEventListener('click', clearAllTechs);
+            document.getElementById('clearAllOrders').addEventListener('click', clearAllOrders);
+
+            loadRules();
+        }
+
+        async function loadAdminPassword() {
+            try {
+                const docRef = doc(db, "settings", "admin_settings");
+                const docSnap = await getDocs(docRef);
+                if (docSnap.exists()) {
+                    ADMIN_PASS = docSnap.data().adminPassword || 'HalAl2026';
+                    document.getElementById('currentPassDisplay').textContent = ADMIN_PASS;
+                }
+            } catch (e) {}
+        }
+
+        async function loadRules() {
+            try {
+                const docRef = doc(db, "settings", "technician_rules");
+                const docSnap = await getDocs(docRef);
+                if (docSnap.exists()) {
+                    document.getElementById('rulesEditor').value = docSnap.data().content || '';
+                }
+            } catch (e) {}
+        }
+
+        // ===== UPDATE STATS =====
+        function updateStats() {
+            const total = allOrders.length;
+            const pending = allOrders.filter(o => o.status === 'Pending').length;
+            const assigned = allOrders.filter(o => o.status === 'Assigned').length;
+            const completed = allOrders.filter(o => o.status === 'Completed').length;
+            const today = new Date().toDateString();
+            const todayOrders = allOrders.filter(o => {
+                if (!o.createdAt) return false;
+                const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+                return d.toDateString() === today;
+            }).length;
+            const todayTx = allTransactions.filter(t => {
+                const d = t.date ? new Date(t.date) : (t.createdAt ? (t.createdAt.toDate ? t.createdAt.toDate() : new Date(t.createdAt)) : new Date(0));
+                return d.toDateString() === today && t.type === 'income';
+            });
+            const todayIncomeSum = todayTx.reduce((s, t) => s + parseFloat(t.amount || 0), 0);
+
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('assignedOrders').textContent = assigned;
+            document.getElementById('completedOrders').textContent = completed;
+            document.getElementById('todayOrders').textContent = todayOrders;
+            document.getElementById('todayIncome').textContent = todayIncomeSum + ' ብር';
+        }
+
+        // ===== RENDER RECENT ORDERS =====
+        function renderRecentOrders() {
+            const tbody = document.getElementById('recentOrdersBody');
+            const sorted = [...allOrders].sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+            const recent = sorted.slice(0, 5);
+            if (recent.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">ምንም ትዕዛዝ የለም</td></tr>';
+                return;
+            }
+            let html = '';
+            recent.forEach(order => {
+                const statusClass = order.status === 'Pending' ? 'status-pending' : order.status === 'Assigned' ? 'status-assigned' : 'status-completed';
+                const date = order.createdAt ? (order.createdAt.toDate ? order.createdAt.toDate() : new Date(order.createdAt)) : new Date();
+                html += `<tr><td>${order.fullName || '—'}</td><td>${order.appliance || '—'}</td><td><span class="status-badge ${statusClass}">${order.status || 'Pending'}</span></td><td>${order.technician || '—'}</td><td>${date.toLocaleDateString('am-ET')}</td></tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ===== RENDER ORDERS =====
+        function renderOrders() {
+            const filter = document.getElementById('orderFilter').value;
+            const tbody = document.getElementById('ordersBody');
+            let filtered = allOrders;
+            if (filter !== 'all') filtered = filtered.filter(o => o.status === filter);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">ምንም ጥያቄ የለም</td></tr>';
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(order => {
+                const statusClass = order.status === 'Pending' ? 'status-pending' : order.status === 'Assigned' ? 'status-assigned' : 'status-completed';
+                const hasLocation = order.customerLat && order.customerLng;
+                const techOptions = allStaff.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+
+                let actions = '';
+                if (order.status === 'Pending') {
+                    actions = `
+                        <select id="assignSelect_${order.id}" style="padding:4px; font-size:0.75rem; width:100px; background:#fff; border:1px solid #e2dcd4; border-radius:6px;">
+                            <option value="">ምረጥ</option>
+                            ${techOptions}
+                        </select>
+                        <button class="btn btn-sm btn-success" onclick="window.assignOrder('${order.id}')"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="window.deleteOrder('${order.id}')"><i class="fas fa-trash"></i></button>
+                    `;
+                } else if (order.status === 'Assigned') {
+                    actions = `
+                        <button class="btn btn-sm btn-primary" onclick="window.completeOrder('${order.id}')"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="window.deleteOrder('${order.id}')"><i class="fas fa-trash"></i></button>
+                    `;
+                } else {
+                    actions = `<span class="status-badge status-completed">✔ ተጠናቋል</span>`;
+                }
+
+                const locationDisplay = hasLocation 
+                    ? `<a href="https://www.google.com/maps?q=${order.customerLat},${order.customerLng}" target="_blank" style="color:#2563eb; font-size:0.7rem;"><i class="fas fa-map-pin"></i></a>`
+                    : '—';
+
+                html += `
+                    <tr>
+                        <td>${order.fullName || '—'}</td>
+                        <td>${order.phone || '—'}</td>
+                        <td>${order.appliance || '—'}</td>
+                        <td><span class="status-badge ${statusClass}">${order.status || 'Pending'}</span></td>
+                        <td>${order.technician || '—'}</td>
+                        <td>${locationDisplay}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            window.assignOrder = async (id) => {
+                const select = document.getElementById('assignSelect_' + id);
+                const techName = select ? select.value : '';
+                if (!techName) { alert('እባክዎ ቴክኒሻን ይምረጡ'); return; }
+                try {
+                    await updateDoc(doc(db, "orders", id), { status: 'Assigned', technician: techName, assignedAt: new Date() });
+                    alert(`✅ ስራው ለ ${techName} ተመድቧል`);
+                } catch (e) { alert('❌ ስህተት'); console.error(e); }
+            };
+
+            window.deleteOrder = async (id) => {
+                if (!confirm('ይህን ትዕዛዝ መሰረዝ እርግጠኛ ነዎት?')) return;
+                try { await deleteDoc(doc(db, "orders", id)); alert('✅ ትዕዛዝ ተሰርዟል'); } 
+                catch (e) { alert('❌ ስህተት'); console.error(e); }
+            };
+
+            window.completeOrder = async (id) => {
+                const price = prompt('የዚህ ስራ ዋጋ ስንት ብር ነው?', '500');
+                if (price === null) return;
+                if (isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+                    alert('እባክዎ ትክክለኛ ዋጋ ያስገቡ');
+                    return;
+                }
+                try {
+                    await updateDoc(doc(db, "orders", id), { status: 'Completed', price: parseFloat(price), completedAt: new Date() });
+                    await addDoc(collection(db, "transactions"), {
+                        description: `ክፍያ: ስራ #${id.substring(0,8)}`,
+                        amount: parseFloat(price),
+                        type: 'income',
+                        staff: '—',
+                        orderId: id,
+                        date: new Date().toISOString().split('T')[0],
+                        createdAt: new Date()
+                    });
+                    alert(`✅ ስራ ተጠናቋል! ${price} ብር ገቢ ተጨምሯል`);
+                } catch (e) { alert('❌ ስህተት'); console.error(e); }
+            };
+        }
+
+        // ===== RENDER TECHNICIANS =====
+        function renderTechList() {
+            const tbody = document.getElementById('techListBody');
+            if (allStaff.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">ምንም ቴክኒሻን የለም</td></tr>';
+                return;
+            }
+            let html = '';
+            allStaff.forEach(tech => {
+                html += `
+                    <tr>
+                        <td><strong>${tech.name}</strong></td>
+                        <td>${tech.specialty || '—'}</td>
+                        <td>${tech.phone || '—'}</td>
+                        <td><span class="status-badge status-free">🟢 ነጻ</span></td>
+                        <td><button class="btn btn-sm btn-danger" onclick="window.deleteTech('${tech.id}','${tech.name}')"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            window.deleteTech = async (id, name) => {
+                if (!confirm(`"${name}" ን መሰረዝ እርግጠኛ ነዎት?`)) return;
+                try { await deleteDoc(doc(db, "staff", id)); alert(`✅ ${name} ተወግዷል`); } 
+                catch (e) { alert('❌ ስህተት'); console.error(e); }
+            };
+        }
+
+        // ===== REGISTER TECHNICIAN =====
+        async function registerTechnician() {
+            const name = document.getElementById('newTechName').value.trim();
+            const specialty = document.getElementById('newTechSpecialty').value.trim();
+            const phone = document.getElementById('newTechPhone').value.trim();
+            if (!name) { alert('እባክዎ ስም ያስገቡ'); return; }
+            try {
+                await addDoc(collection(db, "staff"), { name, specialty: specialty || '—', phone: phone || '—', createdAt: new Date() });
+                document.getElementById('newTechName').value = '';
+                document.getElementById('newTechSpecialty').value = '';
+                document.getElementById('newTechPhone').value = '';
+                alert(`✅ ${name} ተመዝግቧል!`);
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        // ===== FINANCE =====
+        function updateFinance() {
+            const income = allTransactions.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount || 0), 0);
+            const expense = allTransactions.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount || 0), 0);
+            const net = income - expense;
+            document.getElementById('totalIncome').textContent = income.toFixed(2) + ' ብር';
+            document.getElementById('totalExpense').textContent = expense.toFixed(2) + ' ብር';
+            document.getElementById('netProfit').textContent = net.toFixed(2) + ' ብር';
+        }
+
+        function renderTransactions() {
+            const container = document.getElementById('txList');
+            if (allTransactions.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">ምንም ግቤት የለም</p>';
+                return;
+            }
+            const sorted = [...allTransactions].sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+            let html = '';
+            sorted.slice(0, 30).forEach(tx => {
+                const date = tx.date ? new Date(tx.date).toLocaleDateString('am-ET') : '—';
+                const sign = tx.type === 'income' ? '+' : '-';
+                const color = tx.type === 'income' ? '#22c55e' : '#dc2626';
+                html += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f1f1;">
+                    <div><span style="font-weight:500;">${tx.description || '—'}</span> <span style="color:#94a3b8; font-size:0.8rem;">${date}</span></div>
+                    <div style="font-weight:700; color:${color};">${sign} ${parseFloat(tx.amount || 0).toFixed(2)} ብር</div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        async function addTransaction() {
+            const desc = document.getElementById('txDesc').value.trim();
+            const amount = parseFloat(document.getElementById('txAmount').value);
+            const type = document.getElementById('txType').value;
+            const date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
+            if (!desc || isNaN(amount) || amount <= 0) {
+                alert('እባክዎ ትክክለኛ መግለጫ እና ገንዘብ ያስገቡ');
+                return;
+            }
+            try {
+                await addDoc(collection(db, "transactions"), { description: desc, amount, type, date, createdAt: new Date() });
+                document.getElementById('txDesc').value = '';
+                document.getElementById('txAmount').value = '';
+                document.getElementById('txDate').value = '';
+                alert('✅ ግቤት ተጨምሯል!');
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        // ===== SETTINGS =====
+        async function savePassword() {
+            const newPass = document.getElementById('adminPassInput').value.trim();
+            if (!newPass) { alert('እባክዎ አዲስ ይለፍ ቃል ያስገቡ'); return; }
+            try {
+                await setDoc(doc(db, "settings", "admin_settings"), { adminPassword: newPass, updatedAt: new Date() });
+                ADMIN_PASS = newPass;
+                document.getElementById('currentPassDisplay').textContent = newPass;
+                document.getElementById('adminPassInput').value = '';
+                alert(`✅ የይለፍ ቃል ተቀይሯል: ${newPass}`);
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        async function saveRules() {
+            const content = document.getElementById('rulesEditor').value;
+            try {
+                await setDoc(doc(db, "settings", "technician_rules"), { content, updatedAt: new Date() });
+                alert('✅ ህጎቹ በተሳካ ሁኔታ ተቀይረዋል!');
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        function previewRules() {
+            const content = document.getElementById('rulesEditor').value;
+            const preview = document.getElementById('rulesPreview');
+            if (!content.trim()) { alert('እባክዎ ህጎቹን ይጻፉ'); return; }
+            preview.style.display = 'block';
+            preview.textContent = content.trim();
+        }
+
+        async function clearAllTechs() {
+            if (!confirm('ሁሉንም ቴክኒሻኖች መሰረዝ እርግጠኛ ነዎት?')) return;
+            try {
+                const snapshot = await getDocs(collection(db, "staff"));
+                for (const doc of snapshot.docs) await deleteDoc(doc.ref);
+                alert('✅ ሁሉም ቴክኒሻኖች ተወግደዋል');
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        async function clearAllOrders() {
+            if (!confirm('ሁሉንም ትዕዛዞች መሰረዝ እርግጠኛ ነዎት?')) return;
+            try {
+                const snapshot = await getDocs(collection(db, "orders"));
+                for (const doc of snapshot.docs) await deleteDoc(doc.ref);
+                alert('✅ ሁሉም ትዕዛዞች ተወግደዋል');
+            } catch (e) { alert('❌ ስህተት'); console.error(e); }
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>
