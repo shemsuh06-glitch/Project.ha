@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Permissions-Policy" content="geolocation=(self)" />
+    <title>ቴክኒሻን - ሀላል ኤሌክትሮኒክስ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans Ethiopic', 'Segoe UI', Tahoma, sans-serif;
+            background: #f5efe7;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; border-radius: 10px; padding: 8px 16px; font-family: inherit; }
+        input, select { font-family: inherit; padding: 10px 14px; border: 2px solid #e2dcd4; border-radius: 10px; outline: none; font-size: 0.95rem; width: 100%; background: #fff; }
+        input:focus, select:focus { border-color: #fbbf24; box-shadow: 0 0 0 3px rgba(251,191,36,0.15); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0a1628;
+            font-weight: 700;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(251,191,36,0.35); }
+        .btn-success { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+        .btn-success:hover { box-shadow: 0 8px 24px rgba(34,197,94,0.35); }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #38bdf8); color: #fff; }
+        .btn-primary:hover { box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+        .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
+        .btn-map { background: #34a853; color: #fff; }
+        .btn-call { background: #0088cc; color: #fff; }
+
+        .tech-header {
+            background: #0a1628;
+            color: #fff;
+            padding: 10px 0;
+            border-bottom: 3px solid #fbbf24;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .tech-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tech-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tech-header .logo img { height: 40px; width: auto; border-radius: 6px; }
+        .tech-header .logo h1 { font-size: 1.1rem; color: #fff; }
+        .tech-header .logo h1 span { color: #fbbf24; }
+        .tech-header .badge { background: #22c55e; color: #fff; padding: 2px 12px; border-radius: 50px; font-size: 0.65rem; font-weight: 700; }
+        .tech-header .nav-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .tech-header .nav-links a { color: #94a3b8; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; transition: 0.3s; }
+        .tech-header .nav-links a:hover { background: rgba(255,255,255,0.05); color: #fbbf24; }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            border: 1px solid #e2dcd4;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .card-header h3 { font-size: 1.05rem; font-weight: 700; color: #0a1628; display: flex; align-items: center; gap: 8px; }
+        .card-header h3 i { color: #fbbf24; }
+
+        .rules-box {
+            background: #f8fafc;
+            border: 2px solid #e2dcd4;
+            border-radius: 12px;
+            padding: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        .agree-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            font-weight: 600;
+            color: #0a1628;
+        }
+        .agree-check input[type="checkbox"] { width: 20px; height: 20px; accent-color: #fbbf24; cursor: pointer; flex: 0 0 20px; }
+        .rule-warning { color: #dc2626; font-weight: 600; font-size: 0.9rem; margin-top: 4px; display: none; }
+
+        .status-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .status-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 2px solid #e2dcd4;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #fff;
+            color: #475569;
+        }
+        .status-btn:hover { transform: translateY(-2px); }
+        .status-btn.active { border-color: #fbbf24; background: #fef9c3; color: #0a1628; }
+        .status-btn.working.active { background: #dcfce7; color: #166534; }
+        .status-btn.free.active { background: #fef9c3; color: #854d0e; }
+        .status-btn.off.active { background: #f1f5f9; color: #475569; }
+
+        .status-display {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .location-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+        .location-row input { flex: 1; min-width: 100px; }
+        .location-row button { flex: 0 0 auto; }
+
+        .job-card {
+            background: #0a1628;
+            border: 1px solid #2a3a5a;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .job-card:hover { border-color: #fbbf24; }
+        .job-card .top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+        .job-card .top .id { color: #fbbf24; font-weight: 700; font-size: 0.8rem; }
+        .job-card .customer { color: #fff; font-weight: 700; }
+        .job-card .customer span { color: #94a3b8; font-weight: 400; font-size: 0.85rem; }
+        .job-card .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            margin: 6px 0;
+            font-size: 0.85rem;
+        }
+        .job-card .details .label { color: #94a3b8; }
+        .job-card .details .value { color: #e2e8f0; }
+        .job-card .location-box {
+            background: #1a2a4a;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .job-card .location-box .coords { color: #38bdf8; font-family: monospace; font-size: 0.8rem; }
+        .job-card .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .status-pending { background: #fef9c3; color: #854d0e; }
+        .status-assigned { background: #bfdbfe; color: #1e40af; }
+        .status-completed { background: #dcfce7; color: #166534; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .stat-card {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2dcd4;
+        }
+        .stat-card .number { font-size: 1.8rem; font-weight: 900; color: #0a1628; }
+        .stat-card .label { font-size: 0.7rem; color: #64748b; }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .history-item .amount { font-weight: 700; color: #22c55e; }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        .report-item {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e2dcd4;
+        }
+        .report-item .num { font-size: 1.4rem; font-weight: 900; }
+        .report-item .lbl { font-size: 0.7rem; color: #64748b; }
+
+        .debug-box {
+            background: #fef9c3;
+            border: 2px solid #fbbf24;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .debug-box .debug-item {
+            padding: 3px 0;
+            border-bottom: 1px solid #e2dcd4;
+            font-family: monospace;
+        }
+        .debug-box .debug-item.error { color: #dc2626; }
+        .debug-box .debug-item.success { color: #22c55e; }
+        .debug-box .debug-item.info { color: #2563eb; }
+
+        @media (max-width: 768px) {
+            .tech-header .logo h1 { font-size: 0.9rem; }
+            .status-buttons { flex-direction: column; }
+            .status-btn { min-width: unset; }
+            .location-row { flex-direction: column; }
+            .location-row button { width: 100%; }
+            .job-card .details { grid-template-columns: 1fr; }
+            .job-card .actions { flex-direction: column; }
+            .job-card .actions .btn { width: 100%; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .report-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .card { padding: 14px; }
+            .stat-card .number { font-size: 1.3rem; }
+        }
+
+        .text-center { text-align: center; }
+        .text-muted { color: #94a3b8; font-size: 0.85rem; }
+        .mt-8 { margin-top: 8px; }
+        .flex { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="tech-header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/40x40/fbbf24/0a1628?text=H" alt="ሀላል" />
+                <div><h1>ሀላል <span>ኤሌክትሮኒክስ</span></h1></div>
+                <span class="badge"><i class="fas fa-circle" style="font-size:0.4rem;"></i> አክቲቭ</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">🏠 መነሻ</a>
+                <a href="admin.html">⚙️ አስተዳደር</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="padding-top:20px;">
+
+        <!-- RULES -->
+        <div class="card">
+            <div class="flex-between">
+                <h3><i class="fas fa-file-alt"></i> የቴክኒሻን ህግና ደንብ</h3>
+                <span style="font-size:0.65rem; background:#fbbf24; color:#0a1628; padding:2px 12px; border-radius:50px; font-weight:700;">📋 የግድ ያንብቡ</span>
+            </div>
+            <div id="rulesDisplay" class="rules-box">
+                <p style="color:#64748b;">ህግና ደንብ እየተጫነ ነው...</p>
+            </div>
+            <div class="agree-check">
+                <input type="checkbox" id="agreeRules" />
+                <label for="agreeRules">ከላይ ያለውን ህግና ደንብ አንብቤዋለሁ እና እስማማለሁ</label>
+            </div>
+            <div id="ruleWarning" class="rule-warning">⚠️ እባክዎ መከታተል ከመጀመርዎ በፊት ህጎቹን ያንብቡ እና ይስማሙ።</div>
+        </div>
+
+        <!-- SELECT TECHNICIAN NAME -->
+        <div class="card">
+            <h3><i class="fas fa-user-check"></i> 👤 ስምዎ ይምረጡ</h3>
+            <select id="techNameSelect" style="width:100%; padding:12px; border:2px solid #e2dcd4; border-radius:10px; font-size:1rem; margin:8px 0; background:#fff;">
+                <option value="">— ስም ይምረጡ —</option>
+            </select>
+            <div id="techNameDisplay" style="font-size:0.9rem; color:#64748b;">👨‍🔧 ስም አልተመረጠም</div>
+        </div>
+
+        <!-- STATUS & LOCATION -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-check"></i> የአሁን ሁኔታዎ</h3>
+                <span class="text-muted" id="techNameDisplay2">👨‍🔧 ስም አልተመረጠም</span>
+            </div>
+
+            <div class="status-buttons">
+                <button class="status-btn working" data-status="working">✅ በስራ ላይ</button>
+                <button class="status-btn free" data-status="free">🟢 ነጻ</button>
+                <button class="status-btn off" data-status="off-duty">⚪ ዛሬ አልወጣሁም</button>
+            </div>
+            <div id="statusDisplay" class="status-display">ሁኔታ: አልተመረጠም</div>
+
+            <div style="margin-top:14px; border-top:1px solid #e2dcd4; padding-top:14px;">
+                <h4 style="margin-bottom:6px;"><i class="fas fa-map-pin"></i> 📍 ቦታዎን ይላኩ</h4>
+                <div class="location-row">
+                    <input type="text" id="manualLat" placeholder="ላቲቱድ (ለም: 9.0322)" />
+                    <input type="text" id="manualLng" placeholder="ሎንጊቱድ (ለም: 38.7422)" />
+                    <button id="getLocationBtn" class="btn btn-map"><i class="fas fa-crosshairs"></i> ቦታ አግኝ</button>
+                    <button id="sendLocationBtn" class="btn btn-success"><i class="fas fa-paper-plane"></i> ላክ</button>
+                </div>
+                <div id="locationStatus" style="font-size:0.85rem; color:#64748b; margin-top:4px;"></div>
+                <div style="margin-top:6px;">
+                    <a href="https://www.google.com/maps" target="_blank" class="btn btn-sm btn-primary"><i class="fas fa-map"></i> Google Maps ክፈት</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TODAY SUMMARY -->
+        <div class="card">
+            <h3><i class="fas fa-chart-simple"></i> 📊 የዛሬ ማጠቃለያ</h3>
+            <div class="stats-grid" id="todayStats">
+                <div class="stat-card"><div class="number" id="todayJobs">0</div><div class="label">የተጠናቀቁ ስራዎች</div></div>
+                <div class="stat-card"><div class="number" id="todayEarnings">0 ብር</div><div class="label">የዛሬ ገቢ</div></div>
+                <div class="stat-card"><div class="number" id="currentJobDisplay">—</div><div class="label">የአሁን ስራ</div></div>
+            </div>
+        </div>
+
+        <!-- MY JOBS -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-clipboard-list"></i> 📋 የተመደቡለት ስራዎች</h3>
+                <span class="text-muted" id="jobCount">0 ስራዎች</span>
+            </div>
+            <div id="myJobsContainer">
+                <p class="text-center text-muted">ምንም የተመደበ ስራ የለም</p>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-history"></i> 📋 የቀደሙ ስራዎች ታሪክ</h3>
+                <span class="text-muted" id="historyCount">0 ስራዎች</span>
+            </div>
+            <div id="historyContainer">
+                <p class="text-center text-muted">ምንም የቀደመ ስራ የለም</p>
+            </div>
+        </div>
+
+        <!-- DAILY REPORT -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-file-alt"></i> 📅 የዛሬ ሪፖርት</h3>
+                <button id="refreshReportBtn" class="btn btn-sm btn-primary"><i class="fas fa-sync"></i> አድስ</button>
+            </div>
+            <div id="dailyReportContent">
+                <div class="report-grid">
+                    <div class="report-item"><div class="num" id="reportTotalJobs" style="color:#0a1628;">0</div><div class="lbl">ጠቅላላ ስራዎች</div></div>
+                    <div class="report-item"><div class="num" id="reportCompleted" style="color:#22c55e;">0</div><div class="lbl">የተጠናቀቁ</div></div>
+                    <div class="report-item"><div class="num" id="reportRemaining" style="color:#fbbf24;">0</div><div class="lbl">የተረፉ</div></div>
+                    <div class="report-item"><div class="num" id="reportEarnings" style="color:#2563eb;">0 ብር</div><div class="lbl">ጠቅላላ ገቢ</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEBUG -->
+        <div class="card" style="border-color:#fbbf24;">
+            <div class="card-header">
+                <h3><i class="fas fa-bug"></i> 🔍 ስህተት ማጣሪያ</h3>
+                <button id="debugRefreshBtn" class="btn btn-sm btn-primary"><i class="fas fa-sync"></i> አድስ</button>
+            </div>
+            <div id="debugOutput" class="debug-box">
+                <p style="color:#64748b;">ስህተቶች እዚህ ይታያሉ...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2zbhHdvzMbcKCThEpAeFhUyKM6ujj0Do",
+            authDomain: "halal-electronics-4aab5.firebaseapp.com",
+            projectId: "halal-electronics-4aab5",
+            storageBucket: "halal-electronics-4aab5.firebasestorage.app",
+            messagingSenderId: "595316878363",
+            appId: "1:595316878363:web:162cc203a7d21d7fb11cbe"
+        };
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import {
+            getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, query, where, orderBy, limit, getDocs, setDoc, serverTimestamp, getDoc
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        console.log('🚀 Technician Page connected');
+
+        // ===== DOM REFS =====
+        const techNameSelect = document.getElementById('techNameSelect');
+        const techNameDisplay = document.getElementById('techNameDisplay');
+        const techNameDisplay2 = document.getElementById('techNameDisplay2');
+        const rulesDisplay = document.getElementById('rulesDisplay');
+        const agreeCheck = document.getElementById('agreeRules');
+        const ruleWarning = document.getElementById('ruleWarning');
+        const statusBtns = document.querySelectorAll('.status-btn');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const manualLat = document.getElementById('manualLat');
+        const manualLng = document.getElementById('manualLng');
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        const sendLocationBtn = document.getElementById('sendLocationBtn');
+        const locationStatus = document.getElementById('locationStatus');
+        const myJobsContainer = document.getElementById('myJobsContainer');
+        const historyContainer = document.getElementById('historyContainer');
+        const jobCount = document.getElementById('jobCount');
+        const historyCount = document.getElementById('historyCount');
+        const refreshReportBtn = document.getElementById('refreshReportBtn');
+        const debugOutput = document.getElementById('debugOutput');
+        const debugRefreshBtn = document.getElementById('debugRefreshBtn');
+
+        // ===== STATE =====
+        let technicianName = '';
+        let currentStatus = 'off-duty';
+        let technicianOrders = [];
+        let allOrders = [];
+
+        // ===== DEBUG FUNCTION =====
+        function addDebug(message, type = 'info') {
+            const item = document.createElement('div');
+            item.className = `debug-item ${type}`;
+            const time = new Date().toLocaleTimeString();
+            item.textContent = `[${time}] ${message}`;
+            debugOutput.prepend(item);
+            while (debugOutput.children.length > 25) {
+                debugOutput.removeChild(debugOutput.lastChild);
+            }
+            console.log(message);
+        }
+
+        // ===== LOAD TECHNICIANS LIST =====
+        function loadTechniciansList() {
+            addDebug('🔄 ቴክኒሻኖችን በመጫን...', 'info');
+            onSnapshot(collection(db, "staff"), (snapshot) => {
+                const select = techNameSelect;
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">— ስም ይምረጡ —</option>';
+                let count = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    select.innerHTML += `<option value="${data.name}">${data.name}</option>`;
+                    count++;
+                });
+                addDebug(`✅ ${count} ቴክኒሻኖች ተገኝተዋል`, 'success');
+                if (currentValue && [...select.options].some(o => o.value === currentValue)) {
+                    select.value = currentValue;
+                }
+            }, (error) => {
+                addDebug(`❌ ስህተት: ${error.message}`, 'error');
+            });
+        }
+        loadTechniciansList();
+
+        // ===== LOAD RULES =====
+        async function loadRules() {
+            try {
+                const docRef = doc(db, "settings", "technician_rules");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    rulesDisplay.innerHTML = (docSnap.data().content || '').replace(/\n/g, '<br>');
+                    addDebug('✅ ህጎቹ ተጭነዋል', 'success');
+                } else {
+                    rulesDisplay.innerHTML = '<p style="color:#64748b;">📢 ህግና ደንብ ገና አልተዘጋጀም።</p>';
+                }
+            } catch (e) {
+                addDebug(`❌ ህጎቹን ማግኘት አልተቻለም: ${e.message}`, 'error');
+            }
+        }
+        loadRules();
+
+        // ===== TECH NAME SELECTION =====
+        techNameSelect.addEventListener('change', () => {
+            technicianName = techNameSelect.value;
+            techNameDisplay.textContent = technicianName ? `👨‍🔧 ${technicianName}` : '👨‍🔧 ስም አልተመረጠም';
+            techNameDisplay2.textContent = technicianName ? `👨‍🔧 ${technicianName}` : '👨‍🔧 ስም አልተመረጠም';
+            addDebug(`📌 የተመረጠ ስም: "${technicianName}"`, 'info');
+            if (technicianName) {
+                loadTechnicianData();
+                loadStatus();
+            } else {
+                myJobsContainer.innerHTML = '<p class="text-center text-muted">እባክዎ ስምዎን ይምረጡ</p>';
+                historyContainer.innerHTML = '<p class="text-center text-muted">እባክዎ ስምዎን ይምረጡ</p>';
+                jobCount.textContent = '0 ስራዎች';
+                historyCount.textContent = '0 ስራዎች';
+            }
+        });
+
+        // ===== LOAD TECHNICIAN DATA =====
+        function loadTechnicianData() {
+            if (!technicianName) return;
+
+            addDebug(`🔍 ለ "${technicianName}" ስራዎችን በመፈለግ...`, 'info');
+
+            // Orders assigned to this technician - NO WHERE CLAUSE, filter manually
+            onSnapshot(collection(db, "orders"), (snapshot) => {
+                allOrders = [];
+                const matchedOrders = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allOrders.push({ id: doc.id, ...data });
+                    // Check if this order belongs to this technician
+                    if (data.technician && data.technician.trim() === technicianName) {
+                        matchedOrders.push({ id: doc.id, ...data });
+                    }
+                });
+                
+                technicianOrders = matchedOrders;
+                addDebug(`📋 ለ "${technicianName}" የተገኙ ትዕዛዞች: ${technicianOrders.length}`, 
+                    technicianOrders.length > 0 ? 'success' : 'info'
+                );
+                
+                if (technicianOrders.length > 0) {
+                    technicianOrders.forEach(o => {
+                        addDebug(`   - #${o.id.substring(0,8)}: ${o.fullName} (${o.status})`, 'info');
+                    });
+                }
+
+                renderMyJobs();
+                updateTodayStats();
+                updateDailyReport();
+                const pending = technicianOrders.filter(o => o.status !== 'Completed').length;
+                jobCount.textContent = pending + ' ስራዎች';
+            }, (error) => {
+                addDebug(`❌ ስህተት በትዕዛዝ መጫን: ${error.message}`, 'error');
+            });
+
+            // Load transactions - simpler query without index requirement
+            onSnapshot(collection(db, "transactions"), (snapshot) => {
+                const history = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Filter manually for this technician
+                    if (data.type === 'income' && data.staff && data.staff.trim() === technicianName) {
+                        history.push({ id: doc.id, ...data });
+                    }
+                });
+                // Sort manually by date
+                history.sort((a, b) => {
+                    const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+                    const db = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+                    return db - da;
+                });
+                technicianHistory = history;
+                addDebug(`💰 ለ "${technicianName}" የተገኙ ግቤቶች: ${technicianHistory.length}`, 
+                    technicianHistory.length > 0 ? 'success' : 'info'
+                );
+                renderHistory();
+                updateTodayStats();
+                updateDailyReport();
+                historyCount.textContent = technicianHistory.length + ' ስራዎች';
+            }, (error) => {
+                addDebug(`❌ ስህተት በግቤት መጫን: ${error.message}`, 'error');
+            });
+        }
+
+        // ===== LOAD STATUS =====
+        async function loadStatus() {
+            if (!technicianName) return;
+            try {
+                const docRef = doc(db, "technician_status", technicianName);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    currentStatus = data.status || 'off-duty';
+                    statusBtns.forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.status === currentStatus);
+                    });
+                    const statusMap = { 'working': '✅ በስራ ላይ', 'free': '🟢 ነጻ', 'off-duty': '⚪ ዛሬ አልወጣሁም' };
+                    statusDisplay.textContent = `ሁኔታ: ${statusMap[currentStatus]}`;
+                    addDebug(`📌 ሁኔታ ተጭኗል: ${currentStatus}`, 'info');
+                } else {
+                    addDebug('📌 ሁኔታ አልተገኘም, አዲስ ይፈጠራል', 'info');
+                }
+            } catch (e) {
+                addDebug(`❌ ሁኔታ ማግኘት አልተቻለም: ${e.message}`, 'error');
+            }
+        }
+
+        // ===== STATUS BUTTONS =====
+        statusBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!technicianName) { alert('እባክዎ መጀመሪያ ስምዎን ይምረጡ'); return; }
+                statusBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentStatus = btn.dataset.status;
+                const statusMap = { 'working': '✅ በስራ ላይ', 'free': '🟢 ነጻ', 'off-duty': '⚪ ዛሬ አልወጣሁም' };
+                statusDisplay.textContent = `ሁኔታ: ${statusMap[currentStatus]}`;
+                saveStatusToFirebase();
+            });
+        });
+
+        async function saveStatusToFirebase() {
+            if (!technicianName) return;
+            try {
+                await setDoc(doc(db, "technician_status", technicianName), {
+                    technician: technicianName,
+                    status: currentStatus,
+                    lastActive: serverTimestamp(),
+                    todayDate: new Date().toISOString().split('T')[0]
+                }, { merge: true });
+                addDebug(`✅ ሁኔታ ተቀይሯል: ${currentStatus}`, 'success');
+            } catch (e) {
+                addDebug(`❌ ሁኔታ ማስቀመጥ አልተቻለም: ${e.message}`, 'error');
+            }
+        }
+
+        // ===== LOCATION =====
+        getLocationBtn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                locationStatus.textContent = '⚠️ ይህ መሳሪያ ጂፒኤስን አይደግፍም';
+                locationStatus.style.color = '#dc2626';
+                return;
+            }
+            locationStatus.textContent = '⏳ ቦታ በመፈለግ ላይ...';
+            locationStatus.style.color = '#fbbf24';
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude.toFixed(6);
+                    const lng = position.coords.longitude.toFixed(6);
+                    manualLat.value = lat;
+                    manualLng.value = lng;
+                    locationStatus.textContent = `✅ ቦታ ተገኝቷል: ${lat}, ${lng}`;
+                    locationStatus.style.color = '#22c55e';
+                },
+                (error) => {
+                    locationStatus.textContent = '❌ ቦታ ማግኘት አልተቻለም። እባክዎ በእጅ ይሙሉ';
+                    locationStatus.style.color = '#dc2626';
+                },
+                { enableHighAccuracy: true, timeout: 15000 }
+            );
+        });
+
+        sendLocationBtn.addEventListener('click', async () => {
+            if (!technicianName) { alert('እባክዎ መጀመሪያ ስምዎን ይምረጡ'); return; }
+            if (!agreeCheck.checked) { ruleWarning.style.display = 'block'; return; } 
+            else { ruleWarning.style.display = 'none'; }
+
+            const lat = parseFloat(manualLat.value);
+            const lng = parseFloat(manualLng.value);
+            if (isNaN(lat) || isNaN(lng)) {
+                alert('እባክዎ ትክክለኛ ቁጥሮች ያስገቡ');
+                return;
+            }
+            try {
+                await addDoc(collection(db, "technician_locations"), {
+                    technician: technicianName,
+                    latitude: lat,
+                    longitude: lng,
+                    timestamp: serverTimestamp()
+                });
+                locationStatus.textContent = `✅ ቦታ ተልኳል! (${lat}, ${lng})`;
+                locationStatus.style.color = '#22c55e';
+                manualLat.value = '';
+                manualLng.value = '';
+                addDebug(`📍 ቦታ ተልኳል: ${lat}, ${lng}`, 'success');
+            } catch (error) {
+                locationStatus.textContent = `❌ ስህተት: ${error.message}`;
+                locationStatus.style.color = '#dc2626';
+                addDebug(`❌ ቦታ መላክ አልተቻለም: ${error.message}`, 'error');
+            }
+        });
+
+        // ===== RENDER MY JOBS =====
+        function renderMyJobs() {
+            const pendingJobs = technicianOrders.filter(o => o.status !== 'Completed');
+            if (pendingJobs.length === 0) {
+                myJobsContainer.innerHTML = '<p class="text-center text-muted">ምንም የተመደበ ስራ የለም</p>';
+                return;
+            }
+            let html = '';
+            pendingJobs.forEach(order => {
+                const hasLocation = order.customerLat && order.customerLng;
+                const coords = hasLocation ? `${order.customerLat}, ${order.customerLng}` : 'አልተጋራም';
+                html += `
+                    <div class="job-card">
+                        <div class="top">
+                            <span class="id">🆔 #${order.id.substring(0,8)}</span>
+                            <span class="status-badge ${order.status === 'Assigned' ? 'status-assigned' : 'status-pending'}">${order.status || 'Pending'}</span>
+                        </div>
+                        <div class="customer">👤 ${order.fullName || '—'} <span>📱 ${order.phone || '—'}</span></div>
+                        <div class="details">
+                            <div><span class="label">🔧 መሳሪያ:</span> <span class="value">${order.appliance || '—'}</span></div>
+                            <div><span class="label">📍 አድራሻ:</span> <span class="value">${order.address || '—'}</span></div>
+                            <div style="grid-column: span 2;"><span class="label">📝 ችግር:</span> <span class="value">${order.problem || '—'}</span></div>
+                        </div>
+                        <div class="location-box">
+                            <span>📍 ደንበኛ ቦታ:</span>
+                            <span class="coords">${coords}</span>
+                        </div>
+                        <div class="actions">
+                            ${hasLocation ? `<a href="https://www.google.com/maps?q=${order.customerLat},${order.customerLng}" target="_blank" class="btn btn-sm btn-map"><i class="fas fa-directions"></i> ዳይሬክሽን</a>` : ''}
+                            <a href="tel:${order.phone}" class="btn btn-sm btn-call"><i class="fas fa-phone"></i> ደውል</a>
+                            <button class="btn btn-sm btn-success" onclick="window.completeJob('${order.id}')"><i class="fas fa-check"></i> አጠናቅ</button>
+                        </div>
+                    </div>
+                `;
+            });
+            myJobsContainer.innerHTML = html;
+
+            window.completeJob = async (orderId) => {
+                if (!agreeCheck.checked) { alert('እባክዎ ህጎቹን ይስማሙ'); return; }
+                const price = prompt('የዚህ ስራ ዋጋ ስንት ብር ነው?', '500');
+                if (price === null) return;
+                if (isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+                    alert('እባክዎ ትክክለኛ ዋጋ ያስገቡ');
+                    return;
+                }
+                try {
+                    await updateDoc(doc(db, "orders", orderId), {
+                        status: "Completed",
+                        price: parseFloat(price),
+                        completedAt: new Date()
+                    });
+                    await addDoc(collection(db, "transactions"), {
+                        description: `ክፍያ: #${orderId.substring(0,8)}`,
+                        amount: parseFloat(price),
+                        type: "income",
+                        staff: technicianName,
+                        orderId: orderId,
+                        date: new Date().toISOString().split('T')[0],
+                        createdAt: new Date()
+                    });
+                    alert(`✅ ስራ ተጠናቋል! ${price} ብር ገቢ ተጨምሯል`);
+                    addDebug(`✅ ስራ #${orderId.substring(0,8)} ተጠናቋል, ${price} ብር`, 'success');
+                } catch (e) {
+                    alert('❌ ስህተት ተከስቷል');
+                    addDebug(`❌ ስራ ማጠናቀቅ አልተቻለም: ${e.message}`, 'error');
+                }
+            };
+        }
+
+        // ===== RENDER HISTORY =====
+        let technicianHistory = [];
+
+        function renderHistory() {
+            if (technicianHistory.length === 0) {
+                historyContainer.innerHTML = '<p class="text-center text-muted">ምንም የቀደመ ስራ የለም</p>';
+                return;
+            }
+            let html = '';
+            technicianHistory.forEach(tx => {
+                const date = tx.date ? new Date(tx.date).toLocaleDateString('am-ET') : '—';
+                html += `
+                    <div class="history-item">
+                        <div><span style="font-weight:500;">${tx.description || '—'}</span> <span style="color:#94a3b8; font-size:0.75rem;">${date}</span></div>
+                        <div class="amount">${parseFloat(tx.amount || 0).toFixed(0)} ብር</div>
+                    </div>
+                `;
+            });
+            historyContainer.innerHTML = html;
+        }
+
+        // ===== UPDATE STATS =====
+        function updateTodayStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayJobs = technicianHistory.filter(t => t.date === today);
+            const totalEarnings = todayJobs.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+            document.getElementById('todayJobs').textContent = todayJobs.length;
+            document.getElementById('todayEarnings').textContent = totalEarnings.toFixed(0) + ' ብር';
+            const currentJob = technicianOrders.find(o => o.status === 'Assigned');
+            document.getElementById('currentJobDisplay').textContent = currentJob ? currentJob.appliance || '—' : '—';
+        }
+
+        function updateDailyReport() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayOrders = technicianOrders.filter(o => {
+                if (!o.createdAt) return false;
+                const d = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+                return d.toISOString().split('T')[0] === today;
+            });
+            const completed = todayOrders.filter(o => o.status === 'Completed').length;
+            const remaining = todayOrders.filter(o => o.status !== 'Completed').length;
+            const earnings = technicianHistory.filter(t => t.date === today).reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+            document.getElementById('reportTotalJobs').textContent = todayOrders.length;
+            document.getElementById('reportCompleted').textContent = completed;
+            document.getElementById('reportRemaining').textContent = remaining;
+            document.getElementById('reportEarnings').textContent = earnings.toFixed(0) + ' ብር';
+        }
+
+        // ===== REFRESH =====
+        refreshReportBtn.addEventListener('click', () => {
+            updateDailyReport();
+            updateTodayStats();
+            locationStatus.textContent = '🔄 ተዘምኗል';
+            setTimeout(() => locationStatus.textContent = '', 2000);
+            addDebug('🔄 ሪፖርት ተዘምኗል', 'info');
+        });
+
+        debugRefreshBtn.addEventListener('click', () => {
+            addDebug('🔄 ዲባግ ተዘምኗል', 'info');
+            if (technicianName) {
+                loadTechnicianData();
+            }
+        });
+
+        agreeCheck.addEventListener('change', () => {
+            if (agreeCheck.checked) ruleWarning.style.display = 'none';
+        });
+
+        console.log('🚀 Technician Page ready!');
+    </script>
+</body>
+</html>
